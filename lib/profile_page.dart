@@ -6,16 +6,14 @@ import 'responsive_widget.dart';
 import 'Popup.dart';
 // import 'package:js/js_util.dart' as jsutil;
 
-class ProfilePage extends StatefulWidget
-{
+class ProfilePage extends StatefulWidget {
   ProfilePage({Key key}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-{
+class _ProfilePageState extends State<ProfilePage> {
   final aboutMe = [
     'Greetings! I am currently a Computer Science graduate student attending ',
     'The University of Central Florida. My productive spare-time ',
@@ -206,10 +204,12 @@ class _ProfilePageState extends State<ProfilePage>
     return ResponsiveWidget(
       largeScreen: Scaffold(
         backgroundColor: Colors.black,
-        // appBar: AppBar(
-        //   elevation: 0.0,
-        //   backgroundColor: Colors.black,
-        // ),
+        appBar: ResponsiveWidget.isSmallScreen(context)
+            ? AppBar(
+                elevation: 0.0,
+                backgroundColor: Colors.black,
+              )
+            : null,
         drawer: ResponsiveWidget.isSmallScreen(context)
             ? Drawer(
                 child: ListView(
@@ -219,33 +219,34 @@ class _ProfilePageState extends State<ProfilePage>
               )
             : null,
         body: SingleChildScrollView(
-            child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/YellowStoneNationaParkPhoto.jpg'),
-                fit: BoxFit.cover),
-          ),
-          child: AnimatedPadding(
-            duration: Duration(seconds: 1),
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.1),
-            child: ResponsiveWidget(
-              largeScreen: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  NavHeader(navButtons: navButtons()),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.1,
-                  ),
-                  ProfileInfo(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                  ),
-                  SocialInfo(),
-                ],
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/YellowStoneNationaParkPhoto.jpg'),
+                  fit: BoxFit.cover),
+            ),
+            child: AnimatedPadding(
+              duration: Duration(seconds: 1),
+              padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.1),
+              child: ResponsiveWidget(
+                largeScreen: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    NavHeader(navButtons: navButtons()),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.1,
+                    ),
+                    ProfileInfo(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.2,
+                    ),
+                    SocialInfo(),
+                  ],
+                ),
               ),
             ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -331,7 +332,8 @@ class NavButton extends StatelessWidget {
   }
 }
 
-class ProfileInfo extends StatelessWidget {
+class ProfileInfo extends StatelessWidget
+{
   Container profileImage(context) => Container(
         height: ResponsiveWidget.isSmallScreen(context)
             ? MediaQuery.of(context).size.height * 0.25
@@ -345,7 +347,7 @@ class ProfileInfo extends StatelessWidget {
 //            borderRadius: BorderRadius.circular(40),
           shape: BoxShape.circle,
           image: DecorationImage(
-            image: AssetImage('assets/Leo_At_Epcot.jpg'),
+            image: AssetImage('assets/Leo_Magic_Kingdom.jpg'),
             alignment: Alignment.center,
             fit: BoxFit.cover,
           ),
@@ -387,10 +389,11 @@ class ProfileInfo extends StatelessWidget {
               RaisedButton(
                 shape: StadiumBorder(),
                 child: Text('Résumé'),
-                color: Colors.red,
-                onPressed: () {
+                color: Colors.cyan,
+                onPressed: ()
+                {
                   html.window.open(
-                      'https://drive.google.com/file/d/1L3mnQqrNlCNU_IWvtBt9NrmTYLfzWxTb/view?usp=sharing',
+                      'https://drive.google.com/file/d/1Io3FgZxBUUrbXZKwPpBmMyWlrVafGCrr/view?usp=sharing',
                       'resume');
                 },
                 padding: EdgeInsets.all(10),
@@ -400,7 +403,7 @@ class ProfileInfo extends StatelessWidget {
               ),
               OutlineButton(
                 borderSide: BorderSide(
-                  color: Colors.red,
+                  color: Colors.cyanAccent,
                 ),
                 shape: StadiumBorder(),
                 child: Text('Say Hi!'),
