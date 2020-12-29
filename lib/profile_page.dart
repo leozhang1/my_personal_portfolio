@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:html' as html;
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'Animations/bouncing_button_animation.dart';
+import 'Animations/bouncingbutton.dart';
 import 'responsive_widget.dart';
 import 'Popup.dart';
 // import 'package:js/js_util.dart' as jsutil;
@@ -13,7 +16,9 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+{
+
   final aboutMe = [
     'Greetings! I am currently a Computer Science graduate student attending ',
     'The University of Central Florida. My productive spare-time ',
@@ -53,12 +58,6 @@ class _ProfilePageState extends State<ProfilePage> {
     b.writeAll(l);
   }
 
-  // List<ImageResults> _listOfMap = <ImageResults>[];
-  // Image pickedImage;
-  // Map<String, dynamic> _imgData = <String, dynamic>{};
-  // Uint8List imageData;
-  // static final _imgService = locator<ImgPickerService>();
-
   @override
   Widget build(BuildContext context) {
     fillBufferFromList(aboutMeBuffer, aboutMe);
@@ -67,10 +66,11 @@ class _ProfilePageState extends State<ProfilePage> {
     List<Widget> navButtons() => [
           NavButton(
             text: 'About',
+            textColor: Colors.black,
             onPressed: () {
               showPopup(context,
                   widget: PopupBody(
-                    body: Text(
+                    body: SelectableText(
                       aboutMeBuffer.toString(),
                       style: TextStyle(fontSize: 25),
                     ),
@@ -80,10 +80,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           NavButton(
             text: 'Skills',
+            textColor: Colors.black,
             onPressed: () {
               showPopup(context,
                   widget: PopupBody(
-                    body: Text(
+                    body: SelectableText(
                       skillsBuffer.toString(),
                       style: TextStyle(fontSize: 25),
                     ),
@@ -93,13 +94,14 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           NavButton(
             text: 'Work',
+            textColor: Colors.black,
             onPressed: () {
               showPopup(context,
                   widget: PopupBody(
                     body: Column(
                       children: <Widget>[
                         Tooltip(
-                          message: 'Top down 2D stealth game 😊',
+                          message: 'Top down 2D stealth game',
                           child: RaisedButton(
                             onPressed: () {
                               html.window.open(
@@ -116,7 +118,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(
                           height: 20.0,
                         ),
-
                         Tooltip(
                           message:
                               'Upload either red apples or tomatoes and watch my model accurately identify between the two. I recommend using file mode once you\'re in the link',
@@ -129,47 +130,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.grey,
                             textColor: Colors.white,
                             child: Center(
-                              child: Text('Check out my trained model Here 😊'),
+                              child: Text('Check out my trained model Here'),
                             ),
                           ),
                         ),
-
-                        // OutlineButton(
-                        //   onPressed: () async {
-                        //     _imgData = await _imgService.imgPicker();
-
-                        //     imageData =
-                        //         base64.decode(_imgData['image'] as String);
-
-                        //     if (_listOfMap.isNotEmpty) {
-                        //       _listOfMap.clear();
-                        //     }
-
-                        //     setState(() {});
-                        //   },
-                        //   child: const Text('Select Image'),
-                        // ),
-                        // if (imageData != null) ...[
-                        //   SizedBox(
-                        //     width: 300.0,
-                        //     child: Image.memory(imageData),
-                        //   )
-                        // ],
-                        // OutlineButton(
-                        //   onPressed: () async {
-                        //     final _val =
-                        //         await jsutil.promiseToFuture<List<Object>>(
-                        //             imageClassifier());
-
-                        //     setState(
-                        //         () => _listOfMap = listOfImageResults(_val));
-                        //   },
-                        //   child: const Text('Feature Extraction'),
-                        // ),
-                        // for (final _item in _listOfMap) ...[
-                        //   Text('ClassName : ${_item.className}'),
-                        //   Text('Probability : ${_item.probability}\n'),
-                        // ]
                       ],
                     ),
                   ),
@@ -178,6 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           NavButton(
             text: 'Contact',
+            textColor: Colors.black,
             onPressed: () {
               showPopup(context,
                   widget: PopupBody(
@@ -233,6 +198,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     NavHeader(navButtons: navButtons()),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: ButtonAnimationImplementation(
+                        buttonText: "Remember to replace navbuttons with this button type",
+                        // delayeAni: 2000,
+                        onTap: ()
+                        {
+                          ButtonAnimation.disableButton
+                              ? print("Disable true")
+                              : print("I'm pressed");
+                        },
+                      ),
+                    ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
@@ -307,33 +286,35 @@ class PKDot extends StatelessWidget {
   }
 }
 
-class NavButton extends StatelessWidget {
+class NavButton extends StatelessWidget
+{
   final text;
   final onPressed;
-  final Color color;
+  final Color color, textColor;
 
   const NavButton(
       {Key key,
       @required this.text,
       @required this.onPressed,
-      this.color = Colors.orange})
+      this.color = Colors.deepOrangeAccent,
+      this.textColor = Colors.white})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return OutlineButton(
-      child: Text(text),
-      borderSide: BorderSide(
-        color: color,
+  Widget build(BuildContext context)
+  {
+    return RaisedButton(
+      child: Text(
+        text,
+        style: TextStyle(color: textColor),
       ),
+      color: color,
       onPressed: onPressed,
-      highlightedBorderColor: color,
     );
   }
 }
 
-class ProfileInfo extends StatelessWidget
-{
+class ProfileInfo extends StatelessWidget {
   Container profileImage(context) => Container(
         height: ResponsiveWidget.isSmallScreen(context)
             ? MediaQuery.of(context).size.height * 0.25
@@ -390,8 +371,7 @@ class ProfileInfo extends StatelessWidget
                 shape: StadiumBorder(),
                 child: Text('Résumé'),
                 color: Colors.cyan,
-                onPressed: ()
-                {
+                onPressed: () {
                   html.window.open(
                       'https://drive.google.com/file/d/1Io3FgZxBUUrbXZKwPpBmMyWlrVafGCrr/view?usp=sharing',
                       'resume');
@@ -414,7 +394,7 @@ class ProfileInfo extends StatelessWidget
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text('My Email:'),
-                        content: Text(
+                        content: SelectableText(
                             'leoucfstudent@knights.ucf.edu\nor\nleo1997.work@gmail.com'),
                         actions: <Widget>[
                           FlatButton(

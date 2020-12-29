@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_personal_portfolio/profile_page.dart';
 
-void main() {
+void main()
+{
   runApp(PersonalPorfolioPage());
 }
 
