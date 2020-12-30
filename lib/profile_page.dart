@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'Animations/bouncing_button_animation.dart';
 import 'Animations/bouncingbutton.dart';
 import 'responsive_widget.dart';
 import 'Popup.dart';
+import 'package:flutter_web_scrollbar/flutter_web_scrollbar.dart';
+
 // import 'package:js/js_util.dart' as jsutil;
 
 class ProfilePage extends StatefulWidget {
@@ -16,9 +19,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage>
-{
-
+class _ProfilePageState extends State<ProfilePage> {
   final aboutMe = [
     'Greetings! I am currently a Computer Science graduate student attending ',
     'The University of Central Florida. My productive spare-time ',
@@ -56,6 +57,23 @@ class _ProfilePageState extends State<ProfilePage>
     }
 
     b.writeAll(l);
+  }
+
+  ScrollController scrollController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    scrollController = ScrollController();
+  }
+
+  void scrollCallBack(DragUpdateDetails dragUpdate) {
+    setState(()
+    {
+      // Note: 3.5 represents the theoretical height of all my scrollable content. This number will vary from app to app.
+      scrollController.position.moveTo(dragUpdate.globalPosition.dy * 2);
+    });
   }
 
   @override
@@ -156,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage>
                       textColor: Colors.white,
                       child: Center(
                         child: Text(
-                            'Please click me to for my contact information 😊'),
+                            'Please click me to for my contact information'),
                       ),
                     ),
                     padding: const EdgeInsets.fromLTRB(32, 40, 32, 32),
@@ -184,6 +202,9 @@ class _ProfilePageState extends State<ProfilePage>
               )
             : null,
         body: SingleChildScrollView(
+          // only scrolling is allowed
+          // physics: NeverScrollableScrollPhysics(),
+          controller: scrollController,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -198,20 +219,19 @@ class _ProfilePageState extends State<ProfilePage>
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     NavHeader(navButtons: navButtons()),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: ButtonAnimationImplementation(
-                        buttonText: "Remember to replace navbuttons with this button type",
-                        // delayeAni: 2000,
-                        onTap: ()
-                        {
-                          ButtonAnimation.disableButton
-                              ? print("Disable true")
-                              : print("I'm pressed");
-                        },
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    //   child: ButtonAnimationImplementation(
+                    //     buttonText:
+                    //         "Remember to replace navbuttons with this button type",
+                    //     // delayeAni: 2000,
+                    //     onTap: () {
+                    //       ButtonAnimation.disableButton
+                    //           ? print("Disable true")
+                    //           : print("I'm pressed");
+                    //     },
+                    //   ),
+                    // ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.1,
                     ),
@@ -286,8 +306,7 @@ class PKDot extends StatelessWidget {
   }
 }
 
-class NavButton extends StatelessWidget
-{
+class NavButton extends StatelessWidget {
   final text;
   final onPressed;
   final Color color, textColor;
@@ -301,8 +320,7 @@ class NavButton extends StatelessWidget
       : super(key: key);
 
   @override
-  Widget build(BuildContext context)
-  {
+  Widget build(BuildContext context) {
     return RaisedButton(
       child: Text(
         text,
@@ -336,14 +354,14 @@ class ProfileInfo extends StatelessWidget {
       );
 
   Column profileData(BuildContext context) => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: ResponsiveWidget.isSmallScreen(context) || ResponsiveWidget.isMediumScreen(context) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          SelectableText(
             'Hi there! My name is',
             textScaleFactor: 2,
             style: TextStyle(color: Colors.orange),
           ),
-          Text(
+          SelectableText(
             'Leo\nZhang',
             textScaleFactor: 5,
             style: TextStyle(
@@ -354,10 +372,9 @@ class ProfileInfo extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Text(
+          SelectableText(
             'I am currently seeking a part-time job/internship for anything\n'
             'related to programming and problem solving.',
-            softWrap: true,
             textScaleFactor: 1.5,
             style: TextStyle(color: Colors.white70),
           ),
