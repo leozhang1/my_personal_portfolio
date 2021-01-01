@@ -390,7 +390,7 @@ class ProfileInfo extends StatelessWidget {
                 color: Colors.cyan,
                 onPressed: () {
                   html.window.open(
-                      'https://drive.google.com/file/d/1Io3FgZxBUUrbXZKwPpBmMyWlrVafGCrr/view?usp=sharing',
+                      'https://drive.google.com/file/d/1PT6whKUeRRrjOfacC4C9ErFwpHWCKpaz/view?usp=sharing',
                       'resume');
                 },
                 padding: EdgeInsets.all(10),
