@@ -1,25 +1,22 @@
-import 'dart:convert';
 import 'dart:html' as html;
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'Animations/bouncing_button_animation.dart';
-import 'Animations/bouncingbutton.dart';
 import 'responsive_widget.dart';
 import 'Popup.dart';
-import 'package:flutter_web_scrollbar/flutter_web_scrollbar.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 // import 'package:js/js_util.dart' as jsutil;
 
-class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key}) : super(key: key);
+class ProfilePage extends StatefulWidget
+{
+  ProfilePage({Key key}):super(key:key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State < ProfilePage >
+                                                {
   final aboutMe = [
     'Greetings! I am currently a Computer Science graduate student attending ',
     'The University of Central Florida. My productive spare-time ',
@@ -51,8 +48,10 @@ class _ProfilePageState extends State<ProfilePage> {
   /// Note that this method
   /// clears out any contents
   /// previously inside.
-  void fillBufferFromList(StringBuffer b, List<String> l) {
-    if (b.isNotEmpty) {
+  void fillBufferFromList(StringBuffer b, List < String > l)
+  {
+    if (b.isNotEmpty)
+    {
       b.clear();
     }
 
@@ -62,13 +61,21 @@ class _ProfilePageState extends State<ProfilePage> {
   ScrollController scrollController;
 
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState()
+  {
     super.initState();
     scrollController = ScrollController();
   }
 
-  void scrollCallBack(DragUpdateDetails dragUpdate) {
+  @override
+  void dispose()
+  {
+    super.dispose();
+    scrollController.dispose();
+  }
+
+  void scrollCallBack(DragUpdateDetails dragUpdate)
+  {
     setState(()
     {
       // Note: 3.5 represents the theoretical height of all my scrollable content. This number will vary from app to app.
@@ -77,65 +84,60 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     fillBufferFromList(aboutMeBuffer, aboutMe);
     fillBufferFromList(skillsBuffer, skills);
 
-    List<Widget> navButtons() => [
+    List < Widget > navButtons() => [
           NavButton(
-            text: 'About',
-            textColor: Colors.black,
-            onPressed: () {
+            text:'About',
+            textColor:Colors.black,
+            onPressed:()
+                                                        {
               showPopup(context,
-                  widget: PopupBody(
-                    body: SelectableText(
+                  widget:PopupBody(
+                    body:SelectableText(
                       aboutMeBuffer.toString(),
-                      style: TextStyle(fontSize: 25),
-                    ),
-                  ),
-                  title: 'About Me');
-            },
-          ),
+                      style:TextStyle(fontSize:25), ), ),
+                  title:'About Me');
+            }, ),
           NavButton(
-            text: 'Skills',
-            textColor: Colors.black,
-            onPressed: () {
+            text:'Skills',
+            textColor:Colors.black,
+            onPressed:()
+                                                        {
               showPopup(context,
-                  widget: PopupBody(
-                    body: SelectableText(
+                  widget:PopupBody(
+                    body:SelectableText(
                       skillsBuffer.toString(),
-                      style: TextStyle(fontSize: 25),
-                    ),
-                  ),
-                  title: 'About Me');
-            },
-          ),
+                      style:TextStyle(fontSize:25), ), ),
+                  title:'About Me');
+            }, ),
           NavButton(
-            text: 'Work',
-            textColor: Colors.black,
-            onPressed: () {
+            text:'Work',
+            textColor:Colors.black,
+            onPressed:()
+                                                        {
               showPopup(context,
-                  widget: PopupBody(
-                    body: Column(
-                      children: <Widget>[
+                  widget:PopupBody(
+                    body:Column(
+                      children: < Widget > [
                         Tooltip(
-                          message: 'Top down 2D stealth game',
-                          child: RaisedButton(
-                            onPressed: () {
+                          message:'Top down 2D stealth game',
+                          child:RaisedButton(
+                            onPressed:()
+                                                            {
                               html.window.open(
                                   'https://wayneheucf.itch.io/desperate-escape',
                                   'project1');
                             },
-                            color: Colors.grey,
-                            textColor: Colors.white,
-                            child: Center(
-                              child: Text('Check out my game'),
-                            ),
-                          ),
-                        ),
+                            color:Colors.grey,
+                            textColor:Colors.white,
+                            child:Center(
+                              child:Text('Check out my game'), ), ), ),
                         SizedBox(
-                          height: 20.0,
-                        ),
+                          height:20.0, ),
                         Tooltip(
                           message:
                               'Upload either red apples or tomatoes and watch my model accurately identify between the two. I recommend using file mode once you\'re in the link',
@@ -356,25 +358,40 @@ class ProfileInfo extends StatelessWidget {
   Column profileData(BuildContext context) => Column(
         crossAxisAlignment: ResponsiveWidget.isSmallScreen(context) || ResponsiveWidget.isMediumScreen(context) ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: <Widget>[
-          SelectableText(
-            'Hi there! My name is',
-            textScaleFactor: 2,
-            style: TextStyle(color: Colors.orange),
+          TypewriterAnimatedTextKit(
+            speed: const Duration(milliseconds: 250),
+            text: [
+              "Hi there! My name is",
+            ],
+            textStyle: TextStyle(
+                fontSize: 30.0,
+                color: Colors.orange,
+            ),
+            textAlign: TextAlign.start,
+            pause: const Duration(milliseconds: 1500),
           ),
-          SelectableText(
-            'Leo\nZhang',
-            textScaleFactor: 5,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+          SizedBox(
+            width: 250,
+            child: TypewriterAnimatedTextKit(
+              speed: const Duration(milliseconds: 500),
+              text: [
+                "Leo\nZhang",
+              ],
+              textStyle: TextStyle(
+                  fontSize: 30.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.start,
+              pause: const Duration(milliseconds: 1250),
             ),
           ),
           SizedBox(
             height: 10,
           ),
           SelectableText(
-            'I am currently seeking a part-time job/internship for anything\n'
-            'related to programming and problem solving.',
+            'I am currently seeking a job/internship for anything\n'
+            'related to programming and problem solving!',
             textScaleFactor: 1.5,
             style: TextStyle(color: Colors.white70),
           ),
@@ -516,3 +533,19 @@ class SocialInfo extends StatelessWidget {
     );
   }
 }
+
+
+
+          // SelectableText(
+          //   'Hi there! My name is',
+          //   textScaleFactor: 2,
+          //   style: TextStyle(color: Colors.orange),
+          // ),
+          // SelectableText(
+          //   'Leo\nZhang',
+          //   textScaleFactor: 5,
+          //   style: TextStyle(
+          //     color: Colors.white,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
